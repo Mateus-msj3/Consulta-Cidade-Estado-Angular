@@ -10,20 +10,19 @@ import { AppRoutingModule } from './app-routing.module';
 import {CidadeEstadoModule} from "./shared/components/cidade-estado/cidade-estado.component";
 import {HttpClientModule} from "@angular/common/http";
 import {ConsultaComponent} from "./pages/consulta/consulta.component";
-import { ClienteComponent } from './pages/cliente/cliente.component';
-import {CrudClienteComponent, CrudClienteModule} from './shared/components/crud-cliente/crud-cliente.component';
+import {ClienteModule} from './pages/cliente/cliente.component';
+
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ConsultaComponent,
-    ClienteComponent,
   ],
   imports: [
     BrowserModule,
     CidadeEstadoModule,
-    CrudClienteModule,
+    ClienteModule,
     SideNavOuterToolbarModule,
     SideNavInnerToolbarModule,
     SingleCardModule,
