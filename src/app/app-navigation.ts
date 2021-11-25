@@ -19,6 +19,10 @@ export const navigation = [
       {
         text: 'Consulta de Cidades',
         path: '/consulta-cidade'
+      },
+      {
+        text: 'Clientes',
+        path: '/cliente'
       }
 
     ]

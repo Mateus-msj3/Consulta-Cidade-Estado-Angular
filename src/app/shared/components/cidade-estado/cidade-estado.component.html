@@ -10,7 +10,7 @@
             <dx-select-box
               [dataSource]="estado"
               (onValueChanged)="onValueChangedEstado($event)"
-              displayExpr="nome"
+              [displayExpr]="mostraSiglaENome"
             >
             </dx-select-box>
           </div>

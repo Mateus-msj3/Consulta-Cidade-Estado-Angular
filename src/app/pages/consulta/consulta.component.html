@@ -3,7 +3,7 @@
 </div>
 
 <app-cidade-estado
-  (nomeEstado)="onNomeEstado($event)"
+  [(nomeEstado)]="estadoSelecionado"
   (nomeCidade)="onNomeCidade($event)"
 ></app-cidade-estado>
 

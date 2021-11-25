@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {Estado} from "../../shared/models/estado";
 
 @Component({
   selector: 'app-consulta',
@@ -7,12 +8,13 @@ import {Component, OnInit} from '@angular/core';
 })
 export class ConsultaComponent implements OnInit {
 
-  estadoSelecionado: string = ''
+  estadoSelecionado: any = '';
   cidadeSelecionada: string = '';
 
   constructor() { }
 
   ngOnInit(): void {
+
   }
 
 

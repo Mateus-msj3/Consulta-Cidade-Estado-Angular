@@ -1,4 +1,4 @@
-import {Component, EventEmitter, NgModule, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, NgModule, OnInit, Output} from '@angular/core';
 
 import {DxSelectBoxModule} from "devextreme-angular";
 import {BrowserModule} from "@angular/platform-browser";
@@ -17,7 +17,9 @@ export class CidadeEstadoComponent implements OnInit {
   estado: Estado[] = [];
   cidade: Cidade[] = [];
 
-  @Output() nomeEstado = new EventEmitter();
+  @Input() nomeEstado: any;
+  @Output() nomeEstadoChange = new EventEmitter();
+
   @Output() nomeCidade = new EventEmitter();
 
   constructor(private cidadeEstado: CidadeEstadoService) { }
@@ -27,11 +29,15 @@ export class CidadeEstadoComponent implements OnInit {
 
   }
 
+  mostraSiglaENome(item: any) {
+  return item && '' + item.sigla + ' - ' + item.nome;
+  }
+
   onValueChangedEstado(event: any) {
     this.cidadeEstado.getCidades(event.value.id).subscribe(cidades => {
       this.cidade = cidades;
     });
-    this.nomeEstado.emit({nome: event.value.nome})
+    this.nomeEstadoChange.emit(event.value.nome )
     //console.log(event);
   }
 
