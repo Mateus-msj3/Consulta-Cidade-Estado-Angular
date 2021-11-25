@@ -2,6 +2,8 @@ import {Component, NgModule, OnInit} from '@angular/core';
 import {BrowserModule} from "@angular/platform-browser";
 import {DxDataGridModule, DxLoadPanelModule} from "devextreme-angular";
 import {HttpClientModule} from "@angular/common/http";
+import {Cliente} from "../../models/cliente";
+import {ClienteService} from "../../services/cliente.service";
 
 @Component({
   selector: 'crud-cliente',
@@ -10,10 +12,14 @@ import {HttpClientModule} from "@angular/common/http";
 })
 export class CrudClienteComponent implements OnInit {
 
-  constructor() { }
+  cliente: Cliente[] = [];
+
+  constructor(private clienteService: ClienteService) { }
 
   ngOnInit(): void {
+    this.clienteService.getClientes().subscribe(dados => {this.cliente = dados; console.log(dados)});
   }
+
 
 }
 
