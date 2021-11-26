@@ -15,19 +15,26 @@ export class ClienteComponent implements OnInit {
   cliente: Cliente[] = [];
 
 
-  constructor(private clienteService: ClienteService) { }
-
-  ngOnInit(): void {
-    this.clienteService.getClientes().subscribe(dados => {this.cliente = dados; console.log(dados)});
+  constructor(private clienteService: ClienteService) {
   }
 
-  onCreateCliente(dadosCliente: any){
+  ngOnInit(): void {
+    this.clienteService.getClientes().subscribe(dados => {
+      this.cliente = dados;
+      console.log(dados)
+    });
+  }
+
+  onCreateCliente(event: any) {
     const dadosNovoCliente = {
-      codigo: dadosCliente.codigo,
-      nome: dadosCliente.nome
+      codigo: event.changes[0].data.codigo,
+      nome: event.changes[0].data.nome,
     }
+    debugger
+    console.log(event);
     this.clienteService.postCliente(dadosNovoCliente).subscribe(response => {
-      console.log("Cliente Criado com sucesso"+ dadosNovoCliente)})
+      console.log("Cliente Criado com sucesso")
+    })
   }
 
 }
