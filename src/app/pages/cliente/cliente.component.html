@@ -3,9 +3,9 @@
 <div id="data-grid-demo">
   <dx-data-grid
     id="gridContainer"
-    [dataSource]="cliente"
+    [dataSource]="clientes"
     keyExpr="id"
-    (onSaved)="onCreateCliente($event)"
+    (onSaving)="onSaving($event)"
     [showBorders]="true"
   >
     <dxo-paging [enabled]="false"></dxo-paging>

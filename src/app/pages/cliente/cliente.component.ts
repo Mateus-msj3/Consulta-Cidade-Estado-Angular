@@ -1,9 +1,10 @@
-import {Component, NgModule, OnInit} from '@angular/core';
+import {Component, NgModule, OnInit, OnDestroy} from '@angular/core';
 import {Cliente} from "../../shared/models/cliente";
 import {ClienteService} from "../../shared/services/cliente.service";
 import {DxDataGridModule, DxLoadPanelModule} from "devextreme-angular";
 import {BrowserModule} from "@angular/platform-browser";
-import {HttpClientModule} from "@angular/common/http";
+import {HttpClient, HttpClientModule, HttpParams} from "@angular/common/http";
+import { confirm } from 'devextreme/ui/dialog';
 
 @Component({
   selector: 'app-cliente',
@@ -12,32 +13,67 @@ import {HttpClientModule} from "@angular/common/http";
 })
 export class ClienteComponent implements OnInit {
 
-  cliente: Cliente[] = [];
+  clientes: Cliente[] = [];
+  isLoading = false;
 
-
-  constructor(private clienteService: ClienteService) {
+  constructor(private clienteService: ClienteService, private httpClient: HttpClient) {
   }
 
   ngOnInit(): void {
-    this.clienteService.getClientes().subscribe(dados => {
-      this.cliente = dados;
-      console.log(dados)
-    });
+     this.getClientes()
   }
 
-  onCreateCliente(event: any) {
-    const dadosNovoCliente = {
-      codigo: event.changes[0].data.codigo,
-      nome: event.changes[0].data.nome,
+  getClientes() {
+    this.clienteService.getClientes().subscribe((dados) => (this.clientes = dados));
+  }
+
+  onSaving(event: any){
+    debugger;
+    const change = event.changes[0];
+
+    if (change) {
+      event.cancel = false;
+      event.promises = this.processSaving(change);
     }
-    debugger
-    console.log(event);
-    this.clienteService.postCliente(dadosNovoCliente).subscribe(response => {
-      console.log("Cliente Criado com sucesso")
-    })
+
   }
 
+  async processSaving(change: any) {
+    this.isLoading = true;
+
+    try {
+      await this.clienteService.saveChange(change).toPromise();
+    }finally {
+      this.isLoading = false;
+      this.getClientes();
+    }
+  }
+
+  // async updateRow(event: any) {
+  //   const isCanceled = async () => {
+  //     const dialogResult = await confirm("Are you sure?", "Confirm changes");
+  //     if (dialogResult) {
+  //       let params = new HttpParams();
+  //       for (let key in event.newData) {
+  //         params = params.set(key, event.newData[key]);
+  //       }
+  //       const validationResult = await this.httpClient
+  //         .get("https://url/to/your/validation/service", { params: params })
+  //         .toPromise();
+  //       if (validationResult.errorText) {
+  //         console.log(validationResult.errorText);
+  //         return true;
+  //       } else {
+  //         return false;
+  //       }
+  //     } else {
+  //       return true;
+  //     }
+  //   }
+  //   event.cancel = await isCanceled();
+  // }
 }
+
 
 @NgModule({
   imports: [
