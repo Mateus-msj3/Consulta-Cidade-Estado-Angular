@@ -4,6 +4,7 @@ import {ClienteService} from "../../shared/services/cliente.service";
 import {DxDataGridModule, DxLoadPanelModule} from "devextreme-angular";
 import {BrowserModule} from "@angular/platform-browser";
 import {HttpClient, HttpClientModule, HttpParams} from "@angular/common/http";
+import applyChanges from "devextreme/data/apply_changes";
 
 
 @Component({
@@ -15,9 +16,7 @@ export class ClienteComponent implements OnInit {
 
   clientes: Cliente[] = [];
 
-
-  // changes: Change<Order>[] = [];
-  isLoading = false;
+  isLoading: boolean = false;
 
   constructor(private clienteService: ClienteService) {
   }
@@ -26,50 +25,45 @@ export class ClienteComponent implements OnInit {
      this.dadosClientes()
   }
 
-  dadosClientes() {
-    this.clienteService.getClientes().subscribe((dados) => (this.clientes = dados));
+  async dadosClientes() {
+    this.isLoading = true;
+    this.clientes = await this.clienteService.getClientes().toPromise();
+    this.isLoading = false;
+    // this.clienteService.getClientes().subscribe((dados) => (this.clientes = dados));
   }
 
   onSaving(event: any){
-    debugger;
-    const change = event.changes[0];
+    this.isLoading = false;
 
-    if (change) {
-      event.cancel = false;
-      event.promises = this.processSaving(change);
-
-    }
-
-    console.log(event.changes)
-
+      if (event) {
+        event.cancel = false;
+        event.promises = this.processSaving(event);
+      }
   }
 
-  async processSaving(change: any) {
-    this.isLoading = true;
-
-    try {
-      await this.clienteService.saveChange(change).toPromise();
-    }finally {
-      this.isLoading = false;
-      this.dadosClientes();
-      console.log(change.data);
+  async processSaving(event: any) {
+    for (let change of event.changes) {
+      if (change.type == 'insert') {
+        let novo = await this.clienteService.postCliente(change.data).toPromise();
+        this.clientes.push(novo);
+        this.clientes = applyChanges(this.clientes, [novo], {keyExpr: 'id'});
+        this.dadosClientes();
+      }
+      else if (change.type == 'update') {
+        change.data = Object.assign(change.key, change.data);
+        let alterado = await this.clienteService.putCliente(change.data).toPromise();
+        this.clientes = applyChanges(this.clientes, [alterado], {keyExpr: 'id'});
+      }
+      else if (change.type == 'remove') {
+        await this.clienteService.deleteCliente(change.key).toPromise();
+        // this.dadosClientes();
+      }
 
     }
-  }
+    event.cancel = false;
+    this.isLoading = false;
 
-  // onRowUpdating(event: any) {
-  //   const change = event.changes[0].key;
-  //   const isCanceled = async() => {
-  //     const dialog = await  confirm("Tem certeza?", "Confirmar aletrações");
-  //     if (dialog) {
-  //       let params = new HttpParams();
-  //       for (let key in event.newData) {
-  //         params = params.set(key, event.newData[key]);
-  //       }
-  //       const validationResult = await this.clienteService.saveChange(change).toPromise()
-  //     }
-  //   }
-  // }
+  }
 
 }
 
