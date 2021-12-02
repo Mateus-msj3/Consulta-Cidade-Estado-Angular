@@ -5,6 +5,7 @@
     id="gridContainer"
     [dataSource]="clientes"
     keyExpr="id"
+    [repaintChangesOnly]="true"
     (onSaving)="onSaving($event)"
     [showBorders]="true"
   >

@@ -4,7 +4,7 @@ import {ClienteService} from "../../shared/services/cliente.service";
 import {DxDataGridModule, DxLoadPanelModule} from "devextreme-angular";
 import {BrowserModule} from "@angular/platform-browser";
 import {HttpClient, HttpClientModule, HttpParams} from "@angular/common/http";
-import { confirm } from 'devextreme/ui/dialog';
+
 
 @Component({
   selector: 'app-cliente',
@@ -14,16 +14,19 @@ import { confirm } from 'devextreme/ui/dialog';
 export class ClienteComponent implements OnInit {
 
   clientes: Cliente[] = [];
+
+
+  // changes: Change<Order>[] = [];
   isLoading = false;
 
-  constructor(private clienteService: ClienteService, private httpClient: HttpClient) {
+  constructor(private clienteService: ClienteService) {
   }
 
   ngOnInit(): void {
-     this.getClientes()
+     this.dadosClientes()
   }
 
-  getClientes() {
+  dadosClientes() {
     this.clienteService.getClientes().subscribe((dados) => (this.clientes = dados));
   }
 
@@ -34,7 +37,10 @@ export class ClienteComponent implements OnInit {
     if (change) {
       event.cancel = false;
       event.promises = this.processSaving(change);
+
     }
+
+    console.log(event.changes)
 
   }
 
@@ -45,33 +51,26 @@ export class ClienteComponent implements OnInit {
       await this.clienteService.saveChange(change).toPromise();
     }finally {
       this.isLoading = false;
-      this.getClientes();
+      this.dadosClientes();
+      console.log(change.data);
+
     }
   }
 
-  // async updateRow(event: any) {
-  //   const isCanceled = async () => {
-  //     const dialogResult = await confirm("Are you sure?", "Confirm changes");
-  //     if (dialogResult) {
+  // onRowUpdating(event: any) {
+  //   const change = event.changes[0].key;
+  //   const isCanceled = async() => {
+  //     const dialog = await  confirm("Tem certeza?", "Confirmar aletrações");
+  //     if (dialog) {
   //       let params = new HttpParams();
   //       for (let key in event.newData) {
   //         params = params.set(key, event.newData[key]);
   //       }
-  //       const validationResult = await this.httpClient
-  //         .get("https://url/to/your/validation/service", { params: params })
-  //         .toPromise();
-  //       if (validationResult.errorText) {
-  //         console.log(validationResult.errorText);
-  //         return true;
-  //       } else {
-  //         return false;
-  //       }
-  //     } else {
-  //       return true;
+  //       const validationResult = await this.clienteService.saveChange(change).toPromise()
   //     }
   //   }
-  //   event.cancel = await isCanceled();
   // }
+
 }
 
 
