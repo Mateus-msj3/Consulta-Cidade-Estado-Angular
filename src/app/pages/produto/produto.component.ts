@@ -1,11 +1,10 @@
 import {Component, NgModule, OnInit} from '@angular/core';
 import {BrowserModule} from "@angular/platform-browser";
 import {DxDataGridModule, DxLoadPanelModule} from "devextreme-angular";
-import {HttpClientModule, HttpParams} from "@angular/common/http";
+import {HttpClientModule} from "@angular/common/http";
 import {ProdutoService} from "../../shared/services/produto.service";
 import {Produto} from "../../shared/models/produto";
-import { confirm } from 'devextreme/ui/dialog';
-import applyChanges from "devextreme/data/apply_changes";
+
 
 
 @Component({
@@ -30,21 +29,13 @@ export class ProdutoComponent implements OnInit {
   async onInsertingProduto (event: any) {
     let dados = event.data;
     const novoProduto = await this.produtoService.postProduto(dados).toPromise();
-    console.log(novoProduto);
     this.getDadosProduto();
-
   }
 
-
+  
   async onUpdatingProduto (event: any) {
-    debugger;
-    let dados = event.data;
-    for (let key in event.newData) {
-      dados = dados.set(key, event.newData[key]);
-    }
-    const alteracoesProduto = await this.produtoService.putProduto(dados).toPromise();
-    console.log(dados);
-    this.getDadosProduto();
+    event.data = Object.assign(event.oldData, event.newData);
+    const alteracoesProduto = await this.produtoService.putProduto(event.data).toPromise();
   }
 
   async onRemoveProduto (event: any) {
