@@ -5,6 +5,8 @@
     id="gridContainer"
     [dataSource]="produtos"
     (onRowInserting)="onInsertingProduto($event)"
+    (onRowUpdating)="onUpdatingProduto($event)"
+    (onRowRemoving)="onRemoveProduto($event)"
     [showBorders]="true"
   >
     <dxo-paging [enabled]="false"></dxo-paging>

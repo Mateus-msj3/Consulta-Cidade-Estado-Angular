@@ -28,23 +28,29 @@ export class ProdutoComponent implements OnInit {
   }
 
   async onInsertingProduto (event: any) {
-    let params = event.data;
-    // for (let key in event.newData) {
-    //   params = params.set(key, event.newData[key]);
-    // }
-    const dados = await this.produtoService.postProduto(params).toPromise();
-    console.log(dados);
+    let dados = event.data;
+    const novoProduto = await this.produtoService.postProduto(dados).toPromise();
+    console.log(novoProduto);
     this.getDadosProduto();
 
   }
 
 
-  async onUpdatingProduto () {
-      
+  async onUpdatingProduto (event: any) {
+    debugger;
+    let dados = event.data;
+    for (let key in event.newData) {
+      dados = dados.set(key, event.newData[key]);
+    }
+    const alteracoesProduto = await this.produtoService.putProduto(dados).toPromise();
+    console.log(dados);
+    this.getDadosProduto();
   }
 
-  async onRemoveProduto () {
-    this.produtos = await this.produtoService.getProdutos().toPromise();
+  async onRemoveProduto (event: any) {
+    const produtoRemovido = await  this.produtoService.deleteProduto(event.key).toPromise();
+    console.log(produtoRemovido)
+
   }
 
 }
