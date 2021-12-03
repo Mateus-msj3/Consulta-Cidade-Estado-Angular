@@ -49,7 +49,6 @@ export class ClienteComponent implements OnInit {
         this.dadosClientes();
       }
       else if (change.type == 'update') {
-        // debugger;
         change.data = Object.assign(change.key, change.data);
         let alterado = await this.clienteService.putCliente(change.data).toPromise();
         this.clientes = applyChanges(this.clientes, [alterado], {keyExpr: 'id'});

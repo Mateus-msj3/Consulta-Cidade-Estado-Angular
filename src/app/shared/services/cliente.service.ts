@@ -3,9 +3,6 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Cliente} from "../models/cliente";
 
-// const httpOptions = {
-//   headers: new HttpHeaders({ 'Content-Type': 'application/xml' })
-// }
 
 @Injectable({
   providedIn: 'root'
