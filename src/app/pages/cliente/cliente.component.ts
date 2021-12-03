@@ -29,7 +29,6 @@ export class ClienteComponent implements OnInit {
     this.isLoading = true;
     this.clientes = await this.clienteService.getClientes().toPromise();
     this.isLoading = false;
-    // this.clienteService.getClientes().subscribe((dados) => (this.clientes = dados));
   }
 
   onSaving(event: any){
@@ -50,13 +49,13 @@ export class ClienteComponent implements OnInit {
         this.dadosClientes();
       }
       else if (change.type == 'update') {
+        // debugger;
         change.data = Object.assign(change.key, change.data);
         let alterado = await this.clienteService.putCliente(change.data).toPromise();
         this.clientes = applyChanges(this.clientes, [alterado], {keyExpr: 'id'});
       }
       else if (change.type == 'remove') {
         await this.clienteService.deleteCliente(change.key).toPromise();
-        // this.dadosClientes();
       }
 
     }

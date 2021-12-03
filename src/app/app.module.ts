@@ -11,6 +11,7 @@ import {CidadeEstadoModule} from "./shared/components/cidade-estado/cidade-estad
 import {HttpClientModule} from "@angular/common/http";
 import {ConsultaComponent} from "./pages/consulta/consulta.component";
 import {ClienteModule} from './pages/cliente/cliente.component';
+import {ProdutoModule} from './pages/produto/produto.component';
 
 
 
@@ -19,10 +20,12 @@ import {ClienteModule} from './pages/cliente/cliente.component';
     AppComponent,
     ConsultaComponent,
   ],
+
   imports: [
     BrowserModule,
     CidadeEstadoModule,
     ClienteModule,
+    ProdutoModule,
     SideNavOuterToolbarModule,
     SideNavInnerToolbarModule,
     SingleCardModule,

@@ -8,6 +8,7 @@ import { TasksComponent } from './pages/tasks/tasks.component';
 import { DxDataGridModule, DxFormModule } from 'devextreme-angular';
 import {ConsultaComponent} from "./pages/consulta/consulta.component";
 import {ClienteComponent} from "./pages/cliente/cliente.component";
+import {ProdutoComponent} from "./pages/produto/produto.component";
 
 const routes: Routes = [
   {
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: 'cliente',
     component: ClienteComponent
+  },
+  {
+    path: 'produto',
+    component: ProdutoComponent
   },
   {
     path: 'tasks',
