@@ -12,6 +12,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {ConsultaComponent} from "./pages/consulta/consulta.component";
 import {ClienteModule} from './pages/cliente/cliente.component';
 import {ProdutoModule} from './pages/produto/produto.component';
+import {PedidoComponent, PedidoModule} from './pages/pedido/pedido.component';
 
 
 
@@ -26,6 +27,7 @@ import {ProdutoModule} from './pages/produto/produto.component';
     CidadeEstadoModule,
     ClienteModule,
     ProdutoModule,
+    PedidoModule,
     SideNavOuterToolbarModule,
     SideNavInnerToolbarModule,
     SingleCardModule,

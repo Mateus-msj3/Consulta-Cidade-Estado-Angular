@@ -1,0 +1,38 @@
+<h2 class="content-block">Produtos</h2>
+
+<div id="data-grid-demo">
+  <dx-data-grid
+    id="gridContainer"
+    [showBorders]="true"
+  >
+    <dxo-paging [enabled]="false"></dxo-paging>
+    <dxo-editing
+      mode="popup"
+      [allowUpdating]="true"
+      [allowAdding]="true"
+      [allowDeleting]="true"
+    >
+      <dxo-popup
+        title="Dados do Pedido"
+        [showTitle]="true"
+        [width]="700"
+        [height]="525"
+      >
+      </dxo-popup>
+      <dxo-form>
+        <dxi-item itemType="group" [colCount]="2" [colSpan]="2">
+          <dxi-item dataField="id" [disabled]="true"></dxi-item>
+          <dxi-item dataField="numero"></dxi-item>
+          <dxi-item dataField=""></dxi-item>
+          <dxi-item dataField=""></dxi-item>
+        </dxi-item>
+      </dxo-form>
+    </dxo-editing>
+
+    <dxi-column dataField="id"></dxi-column>
+    <dxi-column dataField="numero"></dxi-column>
+    <dxi-column dataField="dataPedido"> </dxi-column>
+    <dxi-column dataField="valorTotal"> </dxi-column>
+  </dx-data-grid>
+</div>
+

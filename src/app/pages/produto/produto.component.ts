@@ -6,7 +6,6 @@ import {ProdutoService} from "../../shared/services/produto.service";
 import {Produto} from "../../shared/models/produto";
 
 
-
 @Component({
   selector: 'app-produto',
   templateUrl: './produto.component.html',
@@ -32,7 +31,7 @@ export class ProdutoComponent implements OnInit {
     this.getDadosProduto();
   }
 
-  
+
   async onUpdatingProduto (event: any) {
     event.data = Object.assign(event.oldData, event.newData);
     const alteracoesProduto = await this.produtoService.putProduto(event.data).toPromise();
