@@ -16,6 +16,8 @@ export class ClienteComponent implements OnInit {
 
   clientes: Cliente[] = [];
 
+  loadPanelPosition = { of: '#gridContainer' };
+
   isLoading: boolean = false;
 
   constructor(private clienteService: ClienteService) {
@@ -32,7 +34,7 @@ export class ClienteComponent implements OnInit {
   }
 
   onSaving(event: any){
-    this.isLoading = false;
+    this.isLoading = true;
 
       if (event) {
         event.cancel = false;

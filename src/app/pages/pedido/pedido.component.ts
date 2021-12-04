@@ -2,7 +2,9 @@ import {Component, NgModule, OnInit} from '@angular/core';
 import {BrowserModule} from "@angular/platform-browser";
 import {DxDataGridModule, DxLoadPanelModule} from "devextreme-angular";
 import {HttpClientModule} from "@angular/common/http";
-import {ProdutoComponent} from "../produto/produto.component";
+import {Pedido} from "../../shared/models/pedido";
+import {PedidoService} from "../../shared/services/pedido.service";
+
 
 @Component({
   selector: 'app-pedido',
@@ -11,9 +13,16 @@ import {ProdutoComponent} from "../produto/produto.component";
 })
 export class PedidoComponent implements OnInit {
 
-  constructor() { }
+  pedidos: Pedido[] = [];
+
+  constructor(private pedidoService: PedidoService) { }
 
   ngOnInit(): void {
+    this.getDadosPedido();
+  }
+
+  async getDadosPedido () {
+    this.pedidos = await this.pedidoService.getPedidos().toPromise();
   }
 
 }

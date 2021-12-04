@@ -1,6 +1,8 @@
 <h2 class="content-block">Clientes</h2>
 
 <div id="data-grid-demo">
+  <dx-load-panel [position]="loadPanelPosition" [visible]="isLoading">
+  </dx-load-panel>
   <dx-data-grid
     id="gridContainer"
     [dataSource]="clientes"

@@ -3,6 +3,7 @@
 <div id="data-grid-demo">
   <dx-data-grid
     id="gridContainer"
+    [dataSource]="pedidos"
     [showBorders]="true"
   >
     <dxo-paging [enabled]="false"></dxo-paging>
@@ -23,8 +24,8 @@
         <dxi-item itemType="group" [colCount]="2" [colSpan]="2">
           <dxi-item dataField="id" [disabled]="true"></dxi-item>
           <dxi-item dataField="numero"></dxi-item>
-          <dxi-item dataField=""></dxi-item>
-          <dxi-item dataField=""></dxi-item>
+          <dxi-item dataField="dataPedido"></dxi-item>
+          <dxi-item dataField="valorTotal"></dxi-item>
         </dxi-item>
       </dxo-form>
     </dxo-editing>
