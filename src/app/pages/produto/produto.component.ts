@@ -26,11 +26,14 @@ export class ProdutoComponent implements OnInit {
   }
 
   async onInsertingProduto (event: any) {
+    debugger;
     let dados = event.data;
+    // for (let key in event.newData) {
+    //   //dados = dados.set(key, event.newData[key]);
+    // }
     const novoProduto = await this.produtoService.postProduto(dados).toPromise();
     this.getDadosProduto();
   }
-
 
   async onUpdatingProduto (event: any) {
     event.data = Object.assign(event.oldData, event.newData);
@@ -39,8 +42,6 @@ export class ProdutoComponent implements OnInit {
 
   async onRemoveProduto (event: any) {
     const produtoRemovido = await  this.produtoService.deleteProduto(event.key).toPromise();
-    console.log(produtoRemovido)
-
   }
 
 }

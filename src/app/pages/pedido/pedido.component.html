@@ -1,9 +1,12 @@
-<h2 class="content-block">Produtos</h2>
+<h2 class="content-block">Pedidos</h2>
 
 <div id="data-grid-demo">
   <dx-data-grid
     id="gridContainer"
     [dataSource]="pedidos"
+    (onRowInserting)="onInsertingPedido($event)"
+    (onRowUpdating)="onUpdatingPedido($event)"
+    (onRowRemoving)="onRemovingPedido($event)"
     [showBorders]="true"
   >
     <dxo-paging [enabled]="false"></dxo-paging>
@@ -21,11 +24,21 @@
       >
       </dxo-popup>
       <dxo-form>
-        <dxi-item itemType="group" [colCount]="2" [colSpan]="2">
+        <dxi-item itemType="group" [colCount]="3" [colSpan]="2">
           <dxi-item dataField="id" [disabled]="true"></dxi-item>
           <dxi-item dataField="numero"></dxi-item>
-          <dxi-item dataField="dataPedido"></dxi-item>
-          <dxi-item dataField="valorTotal"></dxi-item>
+            <dxi-item dataField="cliente">
+              <div>
+                <dx-select-box [items]="clientes" displayExpr="nome" ></dx-select-box>
+              </div>
+            </dxi-item>
+          <dxi-item dataField="produto">
+            <div>
+              <dx-select-box [items]="produtos" displayExpr="descricao" ></dx-select-box>
+            </div>
+          </dxi-item>
+          <dxi-item dataField="quantidade"></dxi-item>
+          <dxi-item dataField="valorTotalItens" [disabled]="true"></dxi-item>
         </dxi-item>
       </dxo-form>
     </dxo-editing>
@@ -33,7 +46,15 @@
     <dxi-column dataField="id"></dxi-column>
     <dxi-column dataField="numero"></dxi-column>
     <dxi-column dataField="dataPedido"> </dxi-column>
-    <dxi-column dataField="valorTotal"> </dxi-column>
+    <dxi-column dataField="cliente" caption="Cliente Nome" cellTemplate="clienteCelTemplate"> </dxi-column>
+    <dxi-column dataField="cliente" caption="Cliente Código" cellTemplate="clientecodigoCelTemplate"> </dxi-column>
+    <dxi-column dataField="itens" cellTemplate="itensCelTemplate"> </dxi-column>
+    <dxi-column dataField="valorTotal" > </dxi-column>
+
+    <div *dxTemplate="let data of 'clienteCelTemplate'">{{data.value ? data.value.nome : 'não achou cliente'}}</div>
+    <div *dxTemplate="let data of 'clientecodigo' +
+     'CelTemplate'">{{data.value ? data.value.codigo : 'não achou cliente'}}</div>
+
   </dx-data-grid>
 </div>
 
