@@ -19,7 +19,7 @@
       <dxo-popup
         title="Dados do Pedido"
         [showTitle]="true"
-        [width]="700"
+        [width]="1080"
         [height]="525"
       >
       </dxo-popup>
@@ -27,18 +27,10 @@
         <dxi-item itemType="group" [colCount]="3" [colSpan]="2">
           <dxi-item dataField="id" [disabled]="true"></dxi-item>
           <dxi-item dataField="numero"></dxi-item>
-            <dxi-item dataField="cliente">
-              <div>
-                <dx-select-box [items]="clientes" displayExpr="nome" ></dx-select-box>
-              </div>
-            </dxi-item>
-          <dxi-item dataField="produto">
-            <div>
-              <dx-select-box [items]="produtos" displayExpr="descricao" ></dx-select-box>
-            </div>
+          <dxi-item dataField="cliente"></dxi-item>
+          <dxi-item itemType="group" [colCount]="2" [colSpan]="2">
+            <dxi-item dataField="itens" [colSpan]="2"></dxi-item>
           </dxi-item>
-          <dxi-item dataField="quantidade"></dxi-item>
-          <dxi-item dataField="valorTotalItens" [disabled]="true"></dxi-item>
         </dxi-item>
       </dxo-form>
     </dxo-editing>
@@ -46,15 +38,52 @@
     <dxi-column dataField="id"></dxi-column>
     <dxi-column dataField="numero"></dxi-column>
     <dxi-column dataField="dataPedido"> </dxi-column>
-    <dxi-column dataField="cliente" caption="Cliente Nome" cellTemplate="clienteCelTemplate"> </dxi-column>
-    <dxi-column dataField="cliente" caption="Cliente Código" cellTemplate="clientecodigoCelTemplate"> </dxi-column>
-    <dxi-column dataField="itens" cellTemplate="itensCelTemplate"> </dxi-column>
+    <dxi-column dataField="cliente" editCellTemplate="clienteCellTemplate" [visible]="false"> </dxi-column>
+    <dxi-column dataField="cliente.nome" caption="Nome do Cliente"> </dxi-column>
     <dxi-column dataField="valorTotal" > </dxi-column>
+    <dxi-column dataField="itens"  [visible]="false" editCellTemplate="itensEditCellTemplate"></dxi-column>
 
-    <div *dxTemplate="let data of 'clienteCelTemplate'">{{data.value ? data.value.nome : 'não achou cliente'}}</div>
-    <div *dxTemplate="let data of 'clientecodigo' +
-     'CelTemplate'">{{data.value ? data.value.codigo : 'não achou cliente'}}</div>
+    <div *dxTemplate="let data of 'clienteCellTemplate'">{{data.value ? data.value.nome : 'não achou cliente'}}</div>
+
+    <div *dxTemplate="let data of 'clienteCellTemplate'">
+      <dx-select-box [items]="clientes"
+                     [displayExpr]="selectCliente"
+                     (onValueChanged)="onValueChangedCliente($event)"
+      ></dx-select-box>
+    </div>
+
+    <div *dxTemplate="let data of 'itensEditCellTemplate'">
+      <dx-data-grid
+        [dataSource]="itens"
+      >
+        <dxo-editing
+          mode="row"
+          [allowAdding]="true"
+          [allowDeleting]="true"
+          [useIcons]="true">
+        </dxo-editing>
+        <dxi-column dataField="produto" editCellTemplate="produtoEditCellTemplate" > </dxi-column>
+        <dxi-column dataField="quantidade"> </dxi-column>
+        <dxi-column dataField="valorTotalItens"> </dxi-column>
+
+        <div *dxTemplate="let data of 'produtoEditCellTemplate'">
+          <dx-select-box [items]="produtos"
+                         [displayExpr]="selectProduto"
+                         (onValueChanged)="onValueChangedProduto($event)"
+          ></dx-select-box>
+        </div>
+
+      </dx-data-grid>
+    </div>
 
   </dx-data-grid>
 </div>
 
+<!--<div>-->
+<!--  <dx-select-box [items]="clientes" displayExpr="nome" ></dx-select-box>-->
+<!--</div>-->
+<!--</dxi-item>-->
+<!--<dxi-item dataField="produto">-->
+<!--  <div>-->
+<!--    <dx-select-box [items]="produtos" displayExpr="descricao" ></dx-select-box>-->
+<!--  </div>-->

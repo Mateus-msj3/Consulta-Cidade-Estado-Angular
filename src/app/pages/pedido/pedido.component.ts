@@ -8,6 +8,7 @@ import {Cliente} from "../../shared/models/cliente";
 import {ClienteService} from "../../shared/services/cliente.service";
 import {ProdutoService} from "../../shared/services/produto.service";
 import {Produto} from "../../shared/models/produto";
+import {ItemPedido} from "../../shared/models/itemPedido";
 
 
 @Component({
@@ -18,8 +19,13 @@ import {Produto} from "../../shared/models/produto";
 export class PedidoComponent implements OnInit {
 
   pedidos: Pedido[] = [];
+
   clientes: Cliente[] = [];
+
   produtos: Produto[] = [];
+
+  itens: ItemPedido[] = [];
+
   constructor(private pedidoService: PedidoService,
               private clienteService: ClienteService,
               private produtoService: ProdutoService) { }
@@ -43,9 +49,25 @@ export class PedidoComponent implements OnInit {
   }
 
 
-  // nomeCliente (item: any) {
-  //   return item && '' + item.clientes.nome
-  // }
+  selectCliente(cliente: Cliente) {
+    return cliente && '' + cliente.codigo + ' - ' + cliente.nome;
+  }
+
+  selectProduto(produto: Produto) {
+    return produto && '' + produto.codigo + ' - ' + produto.descricao;
+  }
+
+  onValueChangedCliente(event: any) {
+    debugger
+    this.clientes = event.value;
+    console.log(this.clientes);
+  }
+
+  onValueChangedProduto(event: any) {
+    debugger;
+    this.produtos = event.value;
+    console.log(this.produtos);
+  }
 
   onInsertingPedido(event: any) {
 
