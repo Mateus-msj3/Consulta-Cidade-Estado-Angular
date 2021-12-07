@@ -41,7 +41,15 @@ export class PedidoComponent implements OnInit {
   }
 
   async getDadosCliente () {
-    this.clientes = await this.clienteService.getClientes().toPromise();
+    let clientes = await this.clienteService.getClientes().toPromise();
+    this.clientes = [];
+    clientes.forEach(x => {
+      let novo = new Cliente();
+      novo.id = x.id;
+      novo.nome = x.nome;
+      novo.codigo = x.codigo;
+      this.clientes.push(novo);
+    })
   }
 
   async getDadosProduto () {
@@ -49,11 +57,15 @@ export class PedidoComponent implements OnInit {
   }
 
 
-  selectCliente(cliente: Cliente) {
+  getCliente(id: number): string{
+    let temp: any = this.clientes.find(x => x.id==id)
+    return temp.nome;
+  }
+  mostraCodigoENomeCliente(cliente: Cliente) {
     return cliente && '' + cliente.codigo + ' - ' + cliente.nome;
   }
 
-  selectProduto(produto: Produto) {
+  mostraCodigoENomeProduto(produto: Produto) {
     return produto && '' + produto.codigo + ' - ' + produto.descricao;
   }
 
@@ -64,23 +76,30 @@ export class PedidoComponent implements OnInit {
   }
 
   onValueChangedProduto(event: any) {
+  }
+
+  async onInsertingPedido(event: any) {
+    // debugger;
+    // let dados = event.data;
+    // const novoPedido = await this.pedidoService.postPedido(dados).toPromise()
+    // console.log(dados)
+  }
+
+  async onUpdatingPedido(event: any) {
+
+  }
+
+  async onRemovingPedido($event: any) {
+
+  }
+
+  clienteValueChange(event: any, data: any) {
+    data.data.cliente = event;
+  }
+
+  onSaving(evente: any) {
     debugger;
-    this.produtos = event.value;
-    console.log(this.produtos);
   }
-
-  onInsertingPedido(event: any) {
-
-  }
-
-  onUpdatingPedido(event: any) {
-
-  }
-
-  onRemovingPedido($event: any) {
-
-  }
-
 }
 
 @NgModule({

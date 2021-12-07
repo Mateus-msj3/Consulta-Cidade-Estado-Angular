@@ -7,6 +7,7 @@
     (onRowInserting)="onInsertingPedido($event)"
     (onRowUpdating)="onUpdatingPedido($event)"
     (onRowRemoving)="onRemovingPedido($event)"
+    (onSaving)="onSaving($event)"
     [showBorders]="true"
   >
     <dxo-paging [enabled]="false"></dxo-paging>
@@ -38,17 +39,18 @@
     <dxi-column dataField="id"></dxi-column>
     <dxi-column dataField="numero"></dxi-column>
     <dxi-column dataField="dataPedido"> </dxi-column>
-    <dxi-column dataField="cliente" editCellTemplate="clienteCellTemplate" [visible]="false"> </dxi-column>
-    <dxi-column dataField="cliente.nome" caption="Nome do Cliente"> </dxi-column>
+    <dxi-column dataField="cliente" editCellTemplate="clienteEditCellTemplate" cellTemplate="clienteCellTemplate"> </dxi-column>
+<!--    <dxi-column dataField="cliente.nome" caption="Nome do Cliente"> </dxi-column>-->
     <dxi-column dataField="valorTotal" > </dxi-column>
     <dxi-column dataField="itens"  [visible]="false" editCellTemplate="itensEditCellTemplate"></dxi-column>
 
     <div *dxTemplate="let data of 'clienteCellTemplate'">{{data.value ? data.value.nome : 'não achou cliente'}}</div>
 
-    <div *dxTemplate="let data of 'clienteCellTemplate'">
+    <div *dxTemplate="let data of 'clienteEditCellTemplate'">
       <dx-select-box [items]="clientes"
-                     [displayExpr]="selectCliente"
-                     (onValueChanged)="onValueChangedCliente($event)"
+                     [value]="data.value"
+                     (valueChange)="clienteValueChange($event, data)"
+                     [displayExpr]="mostraCodigoENomeCliente"
       ></dx-select-box>
     </div>
 
@@ -64,11 +66,10 @@
         </dxo-editing>
         <dxi-column dataField="produto" editCellTemplate="produtoEditCellTemplate" > </dxi-column>
         <dxi-column dataField="quantidade"> </dxi-column>
-        <dxi-column dataField="valorTotalItens"> </dxi-column>
 
         <div *dxTemplate="let data of 'produtoEditCellTemplate'">
           <dx-select-box [items]="produtos"
-                         [displayExpr]="selectProduto"
+                         [displayExpr]="mostraCodigoENomeProduto"
                          (onValueChanged)="onValueChangedProduto($event)"
           ></dx-select-box>
         </div>
@@ -79,11 +80,3 @@
   </dx-data-grid>
 </div>
 
-<!--<div>-->
-<!--  <dx-select-box [items]="clientes" displayExpr="nome" ></dx-select-box>-->
-<!--</div>-->
-<!--</dxi-item>-->
-<!--<dxi-item dataField="produto">-->
-<!--  <div>-->
-<!--    <dx-select-box [items]="produtos" displayExpr="descricao" ></dx-select-box>-->
-<!--  </div>-->
