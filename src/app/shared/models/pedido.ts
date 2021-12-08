@@ -1,14 +1,14 @@
 import {Cliente} from "./cliente";
 import {ItemPedido} from "./itemPedido";
 
-export interface Pedido {
+export class Pedido {
 
-  id: number;
-  numero: string;
-  dataPedido: string;
-  cliente: Cliente;
-  itens: ItemPedido[];
-  valorTotal: number;
+  id!: number;
+  numero!: string;
+  dataPedido!: string;
+  cliente!: Cliente;
+  itens!: ItemPedido[];
+  valorTotal!: number;
 
 
 }

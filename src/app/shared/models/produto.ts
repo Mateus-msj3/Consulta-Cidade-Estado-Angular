@@ -1,8 +1,8 @@
-export interface Produto {
+export class Produto {
 
-  id: number;
-  codigo: string;
-  descricao: string;
-  valorUnitario: number;
+  id!: number;
+  codigo!: string;
+  descricao!: string;
+  valorUnitario!: number;
 
 }

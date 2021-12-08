@@ -41,26 +41,31 @@ export class PedidoComponent implements OnInit {
   }
 
   async getDadosCliente () {
-    let clientes = await this.clienteService.getClientes().toPromise();
-    this.clientes = [];
-    clientes.forEach(x => {
-      let novo = new Cliente();
-      novo.id = x.id;
-      novo.nome = x.nome;
-      novo.codigo = x.codigo;
-      this.clientes.push(novo);
-    })
+    this.clientes = await this.clienteService.getClientes().toPromise();
   }
 
   async getDadosProduto () {
     this.produtos = await this.produtoService.getProdutos().toPromise();
   }
 
+  //
+  // async getDadosCliente () {
+  //   let clientes = await this.clienteService.getClientes().toPromise();
+  //   this.clientes = [];
+  //   clientes.forEach(x => {
+  //     let novo = new Cliente();
+  //     novo.id = x.id;
+  //     novo.nome = x.nome;
+  //     novo.codigo = x.codigo;
+  //     this.clientes.push(novo);
+  //   })
+  // }
 
-  getCliente(id: number): string{
-    let temp: any = this.clientes.find(x => x.id==id)
-    return temp.nome;
-  }
+  // getCliente(id: number): string{
+  //   let temp: any = this.clientes.find(x => x.id==id)
+  //   return temp.nome;
+  // }
+
   mostraCodigoENomeCliente(cliente: Cliente) {
     return cliente && '' + cliente.codigo + ' - ' + cliente.nome;
   }
@@ -69,37 +74,48 @@ export class PedidoComponent implements OnInit {
     return produto && '' + produto.codigo + ' - ' + produto.descricao;
   }
 
-  onValueChangedCliente(event: any) {
-    debugger
-    this.clientes = event.value;
-    console.log(this.clientes);
+
+  clienteValueChange(event: any, data: any) {
+    data.data.cliente = event;
+    console.log(event);
   }
 
-  onValueChangedProduto(event: any) {
+  produtoValueChange(event: any, data: any) {
+    data.data.produto = event;
+    console.log(event);
+  }
+
+  onSavingItensNoGrid(event: any, data: any) {
+    let item = event.changes[0];
+    if (item.type == 'insert') {
+      item.data.valorTotalItens = item.data.quantidade * item.data.produto.valorUnitario;
+    }else if (item.type == 'update' && item.data.quantidade) {
+      item.data.valorTotalItens = item.data.quantidade * item.key.produto.valorUnitario;
+    }
+  }
+
+  onInitNewRowItemPedido(event: any) {
+    if (!event.data.itens) {
+      event.data.itens = new Array<ItemPedido>();
+    }
   }
 
   async onInsertingPedido(event: any) {
-    // debugger;
-    // let dados = event.data;
-    // const novoPedido = await this.pedidoService.postPedido(dados).toPromise()
-    // console.log(dados)
+    debugger;
+    let dados = event.data;
+    const novoPedido = await this.pedidoService.postPedido(dados).toPromise()
+    console.log(dados)
+    this.getDadosPedido();
   }
 
   async onUpdatingPedido(event: any) {
 
   }
 
-  async onRemovingPedido($event: any) {
-
+  async onRemovingPedido(event: any) {
+    const pedidoRemovido = await  this.pedidoService.deletePedido(event.key).toPromise();
   }
 
-  clienteValueChange(event: any, data: any) {
-    data.data.cliente = event;
-  }
-
-  onSaving(evente: any) {
-    debugger;
-  }
 }
 
 @NgModule({

@@ -4,10 +4,10 @@
   <dx-data-grid
     id="gridContainer"
     [dataSource]="pedidos"
+    (onInitNewRow)="onInitNewRowItemPedido($event)"
     (onRowInserting)="onInsertingPedido($event)"
     (onRowUpdating)="onUpdatingPedido($event)"
     (onRowRemoving)="onRemovingPedido($event)"
-    (onSaving)="onSaving($event)"
     [showBorders]="true"
   >
     <dxo-paging [enabled]="false"></dxo-paging>
@@ -40,7 +40,6 @@
     <dxi-column dataField="numero"></dxi-column>
     <dxi-column dataField="dataPedido"> </dxi-column>
     <dxi-column dataField="cliente" editCellTemplate="clienteEditCellTemplate" cellTemplate="clienteCellTemplate"> </dxi-column>
-<!--    <dxi-column dataField="cliente.nome" caption="Nome do Cliente"> </dxi-column>-->
     <dxi-column dataField="valorTotal" > </dxi-column>
     <dxi-column dataField="itens"  [visible]="false" editCellTemplate="itensEditCellTemplate"></dxi-column>
 
@@ -56,21 +55,25 @@
 
     <div *dxTemplate="let data of 'itensEditCellTemplate'">
       <dx-data-grid
-        [dataSource]="itens"
+        [dataSource]="data.value"
+        (onSaving)="onSavingItensNoGrid($event, data)"
       >
         <dxo-editing
           mode="row"
           [allowAdding]="true"
+          [allowUpdating]="true"
           [allowDeleting]="true"
           [useIcons]="true">
         </dxo-editing>
-        <dxi-column dataField="produto" editCellTemplate="produtoEditCellTemplate" > </dxi-column>
+        <dxi-column dataField="pedido" [allowEditing]="false"> </dxi-column>
+        <dxi-column dataField="produto.descricao" editCellTemplate="produtoEditCellTemplate" caption="Produto"> </dxi-column>
         <dxi-column dataField="quantidade"> </dxi-column>
+        <dxi-column dataField="valorTotalItens"> </dxi-column>
 
         <div *dxTemplate="let data of 'produtoEditCellTemplate'">
           <dx-select-box [items]="produtos"
+                         (valueChange)="produtoValueChange($event, data)"
                          [displayExpr]="mostraCodigoENomeProduto"
-                         (onValueChanged)="onValueChangedProduto($event)"
           ></dx-select-box>
         </div>
 
