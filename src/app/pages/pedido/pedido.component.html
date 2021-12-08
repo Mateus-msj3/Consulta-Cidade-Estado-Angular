@@ -5,9 +5,9 @@
     id="gridContainer"
     [dataSource]="pedidos"
     (onInitNewRow)="onInitNewRowItemPedido($event)"
-    (onRowInserting)="onInsertingPedido($event)"
-    (onRowUpdating)="onUpdatingPedido($event)"
-    (onRowRemoving)="onRemovingPedido($event)"
+    (onRowInserting)="onRowInsertingPedido($event)"
+    (onRowUpdating)="onRowUpdatingPedido($event)"
+    (onRowRemoving)="onRowRemovingPedido($event)"
     [showBorders]="true"
   >
     <dxo-paging [enabled]="false"></dxo-paging>
@@ -66,9 +66,11 @@
           [useIcons]="true">
         </dxo-editing>
         <dxi-column dataField="pedido" [allowEditing]="false"> </dxi-column>
-        <dxi-column dataField="produto.descricao" editCellTemplate="produtoEditCellTemplate" caption="Produto"> </dxi-column>
+        <dxi-column dataField="produto" editCellTemplate="produtoEditCellTemplate" caption="Produto" cellTemplate="produtoCellTemplate"> </dxi-column>
         <dxi-column dataField="quantidade"> </dxi-column>
-        <dxi-column dataField="valorTotalItens"> </dxi-column>
+        <dxi-column dataField="valorTotalItens" [allowEditing]="false"> </dxi-column>
+
+        <div *dxTemplate="let data of 'produtoCellTemplate'">{{data.value ? data.value.descricao : 'não achou Produto'}}</div>
 
         <div *dxTemplate="let data of 'produtoEditCellTemplate'">
           <dx-select-box [items]="produtos"
