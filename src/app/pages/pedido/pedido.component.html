@@ -46,15 +46,15 @@
     <div *dxTemplate="let data of 'clienteCellTemplate'">{{data.value ? data.value.nome : 'não achou cliente'}}</div>
 
     <div *dxTemplate="let data of 'clienteEditCellTemplate'">
+      {{data|firstKeysToConsole}}
       <dx-select-box [items]="clientes"
-                     [value]="data.value"
                      (valueChange)="clienteValueChange($event, data)"
                      [displayExpr]="mostraCodigoENomeCliente"
       ></dx-select-box>
     </div>
 
     <div *dxTemplate="let data of 'itensEditCellTemplate'">
-      <dx-data-grid
+      <dx-data-grid #gridItem
         [dataSource]="data.value"
         (onSaving)="onSavingItensNoGrid($event, data)"
       >
@@ -65,7 +65,6 @@
           [allowDeleting]="true"
           [useIcons]="true">
         </dxo-editing>
-        <dxi-column dataField="pedido" [allowEditing]="false"> </dxi-column>
         <dxi-column dataField="produto" editCellTemplate="produtoEditCellTemplate" caption="Produto" cellTemplate="produtoCellTemplate"> </dxi-column>
         <dxi-column dataField="quantidade"> </dxi-column>
         <dxi-column dataField="valorTotalItens" [allowEditing]="false"> </dxi-column>

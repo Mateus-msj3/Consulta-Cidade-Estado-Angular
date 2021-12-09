@@ -1,5 +1,5 @@
 import { Component, OnInit, NgModule, Input, ViewChild } from '@angular/core';
-import { SideNavigationMenuModule, HeaderModule } from '../../shared/components';
+import { SideNavigationMenuModule, HeaderModule } from '../../shared';
 import { ScreenService } from '../../shared/services';
 import { ItemClickEvent } from 'devextreme/ui/tree_view';
 import { DxDrawerModule } from 'devextreme-angular/ui/drawer';

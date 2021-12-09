@@ -13,7 +13,7 @@ export class ClienteService {
 
   constructor(private http: HttpClient) { }
 
-  public getClientes(): Observable<Cliente[]> {
+  public getClientes(): Observable<Array<Cliente>> {
     return this.http.get<Cliente[]>(`${this.url}/`)
   }
 

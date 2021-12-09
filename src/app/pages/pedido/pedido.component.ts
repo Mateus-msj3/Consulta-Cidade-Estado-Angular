@@ -9,7 +9,7 @@ import {ClienteService} from "../../shared/services/cliente.service";
 import {ProdutoService} from "../../shared/services/produto.service";
 import {Produto} from "../../shared/models/produto";
 import {ItemPedido} from "../../shared/models/itemPedido";
-import applyChanges from "devextreme/data/apply_changes";
+import {FirstKeysToConsoleModule} from "../../shared/pipe/first-keys-to-console.pipe";
 
 
 @Component({
@@ -39,33 +39,20 @@ export class PedidoComponent implements OnInit {
 
   async getDadosPedido () {
     this.pedidos = await this.pedidoService.getPedidos().toPromise();
+    console.log(1)
   }
 
-  async getDadosCliente () {
-    this.clientes = await this.clienteService.getClientes().toPromise();
+  getDadosCliente () {
+    this.clienteService.getClientes().subscribe(x => {
+      this.clientes = x;
+    });
+    console.log(2)
   }
 
   async getDadosProduto () {
     this.produtos = await this.produtoService.getProdutos().toPromise();
+    console.log(3)
   }
-
-  //
-  // async getDadosCliente () {
-  //   let clientes = await this.clienteService.getClientes().toPromise();
-  //   this.clientes = [];
-  //   clientes.forEach(x => {
-  //     let novo = new Cliente();
-  //     novo.id = x.id;
-  //     novo.nome = x.nome;
-  //     novo.codigo = x.codigo;
-  //     this.clientes.push(novo);
-  //   })
-  // }
-
-  // getCliente(id: number): string{
-  //   let temp: any = this.clientes.find(x => x.id==id)
-  //   return temp.nome;
-  // }
 
   mostraCodigoENomeCliente(cliente: Cliente) {
     return cliente && '' + cliente.codigo + ' - ' + cliente.nome;
@@ -133,20 +120,21 @@ export class PedidoComponent implements OnInit {
   // }
 
 
-  async onRowInsertingPedido(event: any) {
+  onRowInsertingPedido(event: any) {
     debugger;
-    let dados = event.data;
-    const novoPedido = await this.pedidoService.postPedido(dados).toPromise()
+    let dadosDoPedido = event.data;
+    const novoPedido = this.pedidoService.postPedido(dadosDoPedido).toPromise()
     console.log(event.data)
-    this.getDadosPedido();
+    console.log(novoPedido);
+    this.ngOnInit();
   }
 
-  async onRowUpdatingPedido(event: any) {
-
+  onRowUpdatingPedido(event: any) {
+    console.log(event);
   }
 
-  async onRowRemovingPedido(event: any) {
-   await this.pedidoService.deletePedido(event.key).toPromise();
+  onRowRemovingPedido(event: any) {
+   this.pedidoService.deletePedido(event.key).toPromise();
   }
 
 }
@@ -158,6 +146,7 @@ export class PedidoComponent implements OnInit {
     DxLoadPanelModule,
     DxSelectBoxModule,
     HttpClientModule,
+    FirstKeysToConsoleModule,
   ],
   declarations: [ PedidoComponent ],
   exports: [ PedidoComponent  ]
