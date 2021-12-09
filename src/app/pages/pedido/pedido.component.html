@@ -4,11 +4,9 @@
   <dx-data-grid
     id="gridContainer"
     [dataSource]="pedidos"
-    (onInitNewRow)="onInitNewRowItemPedido($event)"
-    (onRowInserting)="onRowInsertingPedido($event)"
-    (onRowUpdating)="onRowUpdatingPedido($event)"
-    (onRowRemoving)="onRowRemovingPedido($event)"
     [showBorders]="true"
+    (onInitNewRow)="onInitNewRowItemPedido($event)"
+    (onSaving)="onSavingPedido($event)"
   >
     <dxo-paging [enabled]="false"></dxo-paging>
     <dxo-editing
@@ -46,17 +44,20 @@
     <div *dxTemplate="let data of 'clienteCellTemplate'">{{data.value ? data.value.nome : 'não achou cliente'}}</div>
 
     <div *dxTemplate="let data of 'clienteEditCellTemplate'">
-      {{data|firstKeysToConsole}}
+<!--      {{data|firstKeysToConsole}}-->
+<!--                     (valueChange)="clienteValueChange($event, data)"-->
       <dx-select-box [items]="clientes"
-                     (valueChange)="clienteValueChange($event, data)"
+                     [(value)]="data.value"
                      [displayExpr]="mostraCodigoENomeCliente"
+                     [acceptCustomValue]="true"
+                     valueExpr="id"
       ></dx-select-box>
     </div>
 
     <div *dxTemplate="let data of 'itensEditCellTemplate'">
       <dx-data-grid #gridItem
         [dataSource]="data.value"
-        (onSaving)="onSavingItensNoGrid($event, data)"
+        (onSaving)="onSavingItensNoGrid($event)"
       >
         <dxo-editing
           mode="row"
@@ -75,6 +76,8 @@
           <dx-select-box [items]="produtos"
                          (valueChange)="produtoValueChange($event, data)"
                          [displayExpr]="mostraCodigoENomeProduto"
+                         [(value)]="data.value"
+                         [acceptCustomValue]="true"
           ></dx-select-box>
         </div>
 

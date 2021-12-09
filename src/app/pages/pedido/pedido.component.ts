@@ -10,6 +10,7 @@ import {ProdutoService} from "../../shared/services/produto.service";
 import {Produto} from "../../shared/models/produto";
 import {ItemPedido} from "../../shared/models/itemPedido";
 import {FirstKeysToConsoleModule} from "../../shared/pipe/first-keys-to-console.pipe";
+import applyChanges from "devextreme/data/apply_changes";
 
 
 @Component({
@@ -64,6 +65,7 @@ export class PedidoComponent implements OnInit {
 
 
   clienteValueChange(event: any, data: any) {
+    debugger
     data.data.cliente = event;
     console.log(event);
   }
@@ -73,13 +75,18 @@ export class PedidoComponent implements OnInit {
     console.log(event);
   }
 
-  onSavingItensNoGrid(event: any, data: any) {
+  onSavingItensNoGrid(event: any) {
     debugger
     let item = event.changes[0];
-    if (item.type == 'insert') {
-      item.data.valorTotalItens = item.data.quantidade * item.data.produto.valorUnitario;
-    }else if (item.type == 'update' && item.data.quantidade) {
-      item.data.valorTotalItens = item.data.quantidade * item.key.produto.valorUnitario;
+    for (let change of event.changes) {
+      if (item.type == 'insert') {
+        item.data.valorTotalItens = item.data.quantidade * item.data.produto.valorUnitario;
+      } else if (item.type == 'update' && item.data.quantidade) {
+        item.data.valorTotalItens = item.data.quantidade * item.key.produto.valorUnitario;
+        // change.data = Object.assign(change.key, change.data);
+        // let alterado = this.pedidoService.putPedido(change.data).subscribe();
+        // this.pedidos = applyChanges(this.pedidos, [alterado], {keyExpr: 'id'});
+      }
     }
   }
 
@@ -90,52 +97,56 @@ export class PedidoComponent implements OnInit {
 
   }
 
-  // onSavingPedido(event: any) {
-  //   debugger;
-  //   if (event) {
-  //     event.cancel = false;
-  //     event.promises = this.processSaving(event);
-  //   }
-  // }
-  //
-  // async processSaving(event: any) {
-  //   for (let change of event.changes) {
-  //     if (change.type == 'insert') {
-  //       let novo = await this.pedidoService.postPedido(change.data).toPromise();
-  //       this.pedidos.push(novo);
-  //       this.pedidos = applyChanges(this.pedidos, [novo], {keyExpr: 'id'});
-  //       this.getDadosPedido();
-  //     }
-  //     else if (change.type == 'update') {
-  //       change.data = Object.assign(change.key, change.data);
-  //       let alterado = await this.pedidoService.putPedido(change.data).toPromise();
-  //       this.pedidos = applyChanges(this.pedidos, [alterado], {keyExpr: 'id'});
-  //     }
-  //     else if (change.type == 'remove') {
-  //       await this.pedidoService.deletePedido(change.key).toPromise();
-  //     }
-  //
-  //   }
-  //   event.cancel = false;
-  // }
-
-
-  onRowInsertingPedido(event: any) {
+  onSavingPedido(event: any) {
     debugger;
-    let dadosDoPedido = event.data;
-    const novoPedido = this.pedidoService.postPedido(dadosDoPedido).toPromise()
-    console.log(event.data)
-    console.log(novoPedido);
-    this.ngOnInit();
+    if (event) {
+      event.cancel = false;
+      event.promises = this.processSaving(event);
+    }
   }
 
-  onRowUpdatingPedido(event: any) {
-    console.log(event);
+  async processSaving(event: any) {
+    for (let change of event.changes) {
+      if (change.type == 'insert') {
+        let novo = await this.pedidoService.postPedido(change.data).toPromise();
+        this.pedidos.push(novo);
+        this.pedidos = applyChanges(this.pedidos, [novo], {keyExpr: 'id'});
+        this.ngOnInit();
+      }
+      else if (change.type == 'update') {
+        change.data = Object.assign(change.key, change.data);
+        let alterado = await this.pedidoService.putPedido(change.data).toPromise();
+        this.pedidos = applyChanges(this.pedidos, [alterado], {keyExpr: 'id'});
+        this.ngOnInit();
+      }
+      else if (change.type == 'remove') {
+        await this.pedidoService.deletePedido(change.key).toPromise();
+      }
+
+    }
+    event.cancel = false;
   }
 
-  onRowRemovingPedido(event: any) {
-   this.pedidoService.deletePedido(event.key).toPromise();
-  }
+
+  // async onRowInsertingPedido(event: any) {
+  //   debugger;
+  //   let dadosDoPedido = event.data;
+  //   const novoPedido = await this.pedidoService.postPedido(dadosDoPedido).toPromise()
+  //   console.log(event.data)
+  //   console.log(novoPedido);
+  //   this.ngOnInit();
+  // }
+  //
+  // async onRowUpdatingPedido(event: any) {
+  //   debugger
+  //   event.data = Object.assign(event.oldData, event.newData);
+  //   const alteracoesPedido = await this.pedidoService.putPedido(event.data).toPromise();
+  //   console.log(event);
+  // }
+  //
+  // async onRowRemovingPedido(event: any) {
+  //  await this.pedidoService.deletePedido(event.key).toPromise();
+  // }
 
 }
 
