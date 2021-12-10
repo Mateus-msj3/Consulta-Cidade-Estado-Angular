@@ -38,6 +38,6 @@
     <dxi-column dataField="id"></dxi-column>
     <dxi-column dataField="codigo"></dxi-column>
     <dxi-column dataField="descricao"> </dxi-column>
-    <dxi-column dataField="valorUnitario"> </dxi-column>
+    <dxi-column dataField="valorUnitario" [format] = "{style: 'currency', currency: 'BRL', useGrouping: true, minimumFractionDigits: 2}"> </dxi-column>
   </dx-data-grid>
 </div>

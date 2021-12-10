@@ -36,28 +36,27 @@
 
     <dxi-column dataField="id"></dxi-column>
     <dxi-column dataField="numero"></dxi-column>
-    <dxi-column dataField="dataPedido"> </dxi-column>
+    <dxi-column dataField="dataPedido" dataType="Date"> </dxi-column>
     <dxi-column dataField="cliente" editCellTemplate="clienteEditCellTemplate" cellTemplate="clienteCellTemplate"> </dxi-column>
-    <dxi-column dataField="valorTotal" > </dxi-column>
-    <dxi-column dataField="itens"  [visible]="false" editCellTemplate="itensEditCellTemplate"></dxi-column>
+    <dxi-column dataField="valorTotal" [format] = "{style: 'currency', currency: 'BRL', useGrouping: true, minimumFractionDigits: 2}"> </dxi-column>
+    <dxi-column dataField="itens" [visible]="false" editCellTemplate="itensEditCellTemplate"></dxi-column>
 
     <div *dxTemplate="let data of 'clienteCellTemplate'">{{data.value ? data.value.nome : 'não achou cliente'}}</div>
 
     <div *dxTemplate="let data of 'clienteEditCellTemplate'">
-<!--      {{data|firstKeysToConsole}}-->
-<!--                     (valueChange)="clienteValueChange($event, data)"-->
+      <!--      {{data|firstKeysToConsole}}-->
       <dx-select-box [items]="clientes"
-                     [(value)]="data.value"
-                     [displayExpr]="mostraCodigoENomeCliente"
-                     [acceptCustomValue]="true"
                      valueExpr="id"
+                     [value]="data.value ? data.value.id : 0"
+                     [displayExpr]="mostraCodigoENomeCliente"
+                     (valueChange)="clienteValueChange($event, data)"
       ></dx-select-box>
     </div>
 
     <div *dxTemplate="let data of 'itensEditCellTemplate'">
       <dx-data-grid #gridItem
-        [dataSource]="data.value"
-        (onSaving)="onSavingItensNoGrid($event)"
+                    [dataSource]="data.value"
+                    (onSaving)="onSavingItensNoGrid($event, data)"
       >
         <dxo-editing
           mode="row"
@@ -68,16 +67,16 @@
         </dxo-editing>
         <dxi-column dataField="produto" editCellTemplate="produtoEditCellTemplate" caption="Produto" cellTemplate="produtoCellTemplate"> </dxi-column>
         <dxi-column dataField="quantidade"> </dxi-column>
-        <dxi-column dataField="valorTotalItens" [allowEditing]="false"> </dxi-column>
+        <dxi-column dataField="valorTotalItens" [allowEditing]="false" [format] = "{style: 'currency', currency: 'BRL', useGrouping: true, minimumFractionDigits: 2}"> </dxi-column>
 
         <div *dxTemplate="let data of 'produtoCellTemplate'">{{data.value ? data.value.descricao : 'não achou Produto'}}</div>
 
         <div *dxTemplate="let data of 'produtoEditCellTemplate'">
           <dx-select-box [items]="produtos"
+                         valueExpr="id"
+                         [value]="data.value ? data.value.id : 0"
                          (valueChange)="produtoValueChange($event, data)"
                          [displayExpr]="mostraCodigoENomeProduto"
-                         [(value)]="data.value"
-                         [acceptCustomValue]="true"
           ></dx-select-box>
         </div>
 
@@ -86,4 +85,3 @@
 
   </dx-data-grid>
 </div>
-

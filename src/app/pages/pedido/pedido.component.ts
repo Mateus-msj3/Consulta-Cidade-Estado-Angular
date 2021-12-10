@@ -40,19 +40,16 @@ export class PedidoComponent implements OnInit {
 
   async getDadosPedido () {
     this.pedidos = await this.pedidoService.getPedidos().toPromise();
-    console.log(1)
   }
 
   getDadosCliente () {
     this.clienteService.getClientes().subscribe(x => {
       this.clientes = x;
     });
-    console.log(2)
   }
 
   async getDadosProduto () {
     this.produtos = await this.produtoService.getProdutos().toPromise();
-    console.log(3)
   }
 
   mostraCodigoENomeCliente(cliente: Cliente) {
@@ -65,29 +62,25 @@ export class PedidoComponent implements OnInit {
 
 
   clienteValueChange(event: any, data: any) {
-    debugger
-    data.data.cliente = event;
-    console.log(event);
+    data.setValue(this.clientes.find(x => x.id == event));
   }
 
   produtoValueChange(event: any, data: any) {
-    data.data.produto = event;
-    console.log(event);
+    data.setValue(this.produtos.find(x => x.id == event));
   }
 
-  onSavingItensNoGrid(event: any) {
+  onSavingItensNoGrid(event: any, data: any) {
     debugger
-    let item = event.changes[0];
-    for (let change of event.changes) {
-      if (item.type == 'insert') {
-        item.data.valorTotalItens = item.data.quantidade * item.data.produto.valorUnitario;
-      } else if (item.type == 'update' && item.data.quantidade) {
-        item.data.valorTotalItens = item.data.quantidade * item.key.produto.valorUnitario;
-        // change.data = Object.assign(change.key, change.data);
-        // let alterado = this.pedidoService.putPedido(change.data).subscribe();
-        // this.pedidos = applyChanges(this.pedidos, [alterado], {keyExpr: 'id'});
+      for(let change of event.changes) {
+        if (change.type == 'insert') {
+          change.data.valorTotalItens = change.data.quantidade * change.data.produto.valorUnitario;
+        } else if (change.type == 'update') {
+          change.data = Object.assign(change.key, change.data);
+          change.data.valorTotalItens = change.data.quantidade * change.key.produto.valorUnitario;
+          data.value = applyChanges(data.value, [change.data], {keyExpr: 'id'});
+        }
       }
-    }
+      data.setValue(data.value);
   }
 
   onInitNewRowItemPedido(event: any) {
